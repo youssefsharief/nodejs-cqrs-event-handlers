@@ -1,0 +1,26 @@
+{
+  "name": "crossover",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "coverage": "nodemon --exec istanbul cover node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+    "test": "nodemon --exec jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "dev": "nodemon ./src/bin/www",
+    "start": "nf start",
+    "s": "node src/bin/www"
+  },
+  "engines": {
+    "node": "8.9.1"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "foreman": "2.0.0",
+    "mongodb": "^2.2.0",
+    "mongoose": "^4.13.6"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.7.0",
+    "nodemon": "^1.11.0"
+  }
+}

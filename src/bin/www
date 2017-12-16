@@ -1,0 +1,9 @@
+const db = require('../database/db-connection.js')
+const pollEventStore = require('../core/poll-event-store').poll
+require('dotenv').config()
+
+
+process.on('unhandledRejection', up => { throw up })
+db.connectToOriginalDb()
+
+pollEventStore()
