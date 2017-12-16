@@ -33,8 +33,8 @@ async function handleAccountDeleted(body){
 
 async function handleSystemTagAdded(body){
     console.log('adding systag')
-    
-    return logger(async () => db.addSystemTag(body.aggregateId, body.payload.name, body.payload.appliesToExpenses, body.payload.appliesToTimesheets), 'system tag added')()
+    const obj = {}
+    return logger(async () => db.addSystemTag(body.aggregateId, body.payload.systemTagId, body.payload.name, body.payload.appliesToExpenses, body.payload.appliesToTimesheets), 'system tag added')()
 }
 
 module.exports = {handleAccountAddressUpdated,  handleAccountApproved, handleAccountDeleted, handleAccountCreated, handleSystemTagAdded}

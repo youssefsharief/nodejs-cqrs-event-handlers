@@ -6,8 +6,8 @@ async function saveNewAccount(accountId, accountNumber, businessName) {
     return await newAccount.save().catch(err => { throw err })
 }
 
-async function addSystemTag(accountId, name, appliesToExpenses, appliesToTimesheets) {
-    const newSystemTag = new systemTagModel({ accountId, name, appliesToExpenses, appliesToTimesheets })
+async function addSystemTag(accountId, systemTagId, name, appliesToExpenses, appliesToTimesheets) {
+    const newSystemTag = new systemTagModel({ accountId, systemTagId, name, appliesToExpenses, appliesToTimesheets })
     return newSystemTag.save().catch(err => { throw err })
 }
 
@@ -30,10 +30,8 @@ async function approveAccount(accountId, approvedBy) {
 }
 
 
-async function getAccountDetailsById(accountId) {
-    return await accountModel.findOne({ accountId }).lean().exec().catch(err => { throw err })
-}
+
 
 module.exports = {
-    saveNewAccount, addSystemTag, deleteAccount, updateAccountAddress, approveAccount, getAccountDetailsById
+    saveNewAccount, addSystemTag, deleteAccount, updateAccountAddress, approveAccount
 }

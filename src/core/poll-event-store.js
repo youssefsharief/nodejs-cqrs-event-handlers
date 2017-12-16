@@ -5,10 +5,6 @@ const currentCursorFs = require('./current-cursor-fs')
 const mongoCursorOptions = require('./mongo-cursor-options')
 
 
-
-
-
-
 async function poll() {
     let currentCursor = await currentCursorFs.read()
     const db = await mongodb.MongoClient.connect(process.env.mongodbEventStoreURI, {promiseLibrary: Promise})
@@ -30,8 +26,6 @@ async function poll() {
         dealWithEventSavedInEventStore(e)
         currentCursorFs.write(e._id)
     })
-
-    // In case event stream is has been deleted (So rare to happen)
         
 }
 module.exports = { poll }
