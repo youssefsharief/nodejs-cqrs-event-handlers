@@ -13,7 +13,7 @@ async function addSystemTag(accountId, systemTagId, name, appliesToExpenses, app
 
 
 async function deleteAccount(accountId) {
-    return await accountModel.remove({ accountId }).exec().catch(err => console.log(err.message))
+    await Promise.all([accountModel.remove({ accountId }).exec(), systemTagModel.remove({accountId}).exec().catch(err=>console.log(err))]).catch(err => console.log(err.message))
 }
 
 

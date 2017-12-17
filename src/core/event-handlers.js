@@ -2,7 +2,6 @@ const mongodb = require('mongodb')
 const db = require('../database/db-ctrl')
 const logger = require('../services/logging-event-handler-decorator').eventHandlerLogger
 const eventsConstants = require('../config/events.constants')
-const eventConstants = require('../config/events.constants')
 
 async function handleAccountAddressUpdated(e) {
     return await logger(async () => await db.updateAccountAddress(e.aggregateId, e.payload),
@@ -38,15 +37,41 @@ async function handleSystemTagAdded(e) {
 
 async function handleAccountReinstated(e) {
     const db = await mongodb.MongoClient.connect(process.env.mongodbEventStoreURI, { promiseLibrary: Promise }).catch(err => { throw err })
-    let events = await db.db('accounts-event-store').collection('events').find({ aggregateId: e.aggregateId })
-    events = events.filter(x => x.name !== eventsConstants.domainEvents.accountApproved || x.name !== eventsConstants.domainEvents.accountDeleted || x.name !== eventsConstants.domainEvents.accountReinstated)
-    events.forEach(async e => {
+    const collection = await db.db('accounts-event-store').collection('events')
+    collection.find({ 'aggregateId': e.aggregateId }).toArray(function(err, events) {
+        events = events.filter(x => x.name !== eventsConstants.domainEvents.accountApproved && x.name !== eventsConstants.domainEvents.accountDeleted && x.name !== eventsConstants.domainEvents.accountReinstated)
+        const q = queue()
+        events.forEach(async e => {
+            return await q(e)
+        })
+        
+    });
+    
+}
+
+function queue () {
+    const arr = []
+    return async function enqueue (e) {
+        arr.push(e)
+        global.log.error(arr.length)
+        
+        if(arr.length===1) return await recurs()
+    }
+    async function recurs() {
+        await checkForUndoDeleteEvents(arr[0])
+        arr.shift()
+        global.log.warn(arr.length)
+        
+        if (arr.length) return recurs()
+    }
+    async function checkForUndoDeleteEvents(e){
         switch (e.name) {
-            case eventConstants.domainEvents.accountAddressUpdated: return await handleAccountAddressUpdated(e)
-            case eventConstants.domainEvents.systemTagAdded: return await handleSystemTagAdded(e)
-            case eventConstants.domainEvents.accountCreated: return await handleAccountCreated(e)
+            case eventsConstants.domainEvents.accountAddressUpdated: return await handleAccountAddressUpdated(e)
+            case eventsConstants.domainEvents.systemTagAdded: return await handleSystemTagAdded(e)
+            case eventsConstants.domainEvents.accountCreated: return await handleAccountCreated(e)
         }
-    })
+    }
+    
 }
 
 
