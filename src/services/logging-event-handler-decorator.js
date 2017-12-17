@@ -1,21 +1,17 @@
-function eventHandlerLogger(fn, eventHandlerName) {
-    
-        return async () => {
-            console.log(`Start handling event: ${eventHandlerName}`)
-            // console.time('time')
-            try {
-                const res = await fn()
-                console.log(res)
-                
-                // console.timeEnd('time')
-                return res
-            } catch (e) {
-                console.error(`Exception thrown while handling event ${eventHandlerName}  ${e.message}   ${e.type} `)
-                // console.timeEnd('time')
-                throw e
-            }
+function eventHandlerLogger(fn, eventName) {
+    return async () => {
+        const labelWithTime = `Time taken to handle event ${eventName} ` + Date.now();
+        console.time(labelWithTime);
+        try {
+            const res = await fn()
+            console.timeEnd(labelWithTime);
+            return res
+        } catch (e) {
+            console.error(`Exception thrown while handling event ${eventName}  ${e.message}   ${e.type} `)
+            console.timeEnd(labelWithTime)
+            throw e
         }
     }
-    
-    module.exports = { eventHandlerLogger }
-    
+}
+
+module.exports = { eventHandlerLogger }

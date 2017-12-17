@@ -9,11 +9,9 @@ const dbConnection = require('../../src/database/db-connection.js')
 describe("Db Event store ", function () {
     beforeAll(async () => {
         dbConnection.connectToTestDb()
-        // await db.removeAllEvents()
     })
 
     afterAll(async () => {
-        // await db.removeAllEvents()
     })
 
 
@@ -33,7 +31,8 @@ describe("Db Event store ", function () {
     describe("Delete an account", function () {
         const accountId = faker.random.uuid()
         beforeAll(async () => {
-            await db.saveNewAccount(accountId, 555556, faker.name.firstName())
+            let res = await db.saveNewAccount(accountId, 555556, faker.name.firstName())
+            expect(res).toBeTruthy()
         })
         it("should delete an account", async function () {
             const res = await db.deleteAccount(accountId)
@@ -45,7 +44,7 @@ describe("Db Event store ", function () {
     describe("Adding a system tag", function () {
         const accountId = faker.random.uuid()
         beforeAll(async () => {
-            await db.saveNewAccount(accountId, 555556, faker.name.firstName())
+            expect(await db.saveNewAccount(accountId, 555556, faker.name.firstName())).toBeTruthy()
         })
         it("should add system tag", async function () {
             const sysTag = {
@@ -67,7 +66,7 @@ describe("Db Event store ", function () {
         const accountId = faker.random.uuid()
         
         beforeAll(async () => {
-            await db.saveNewAccount(accountId, 555556, faker.name.firstName())
+            expect(await db.saveNewAccount(accountId, 555556, faker.name.firstName())).toBeTruthy()
         })
         it("should update address successfully", async function () {
             const newAddress = {
@@ -90,7 +89,7 @@ describe("Db Event store ", function () {
         const accountId = faker.random.uuid()
         
         beforeAll(async () => {
-            await db.saveNewAccount(accountId, 555556, faker.name.firstName())
+            expect(await db.saveNewAccount(accountId, 555556, faker.name.firstName())).toBeTruthy()
         })
         it("should approve account successfully", async function () {
             const approvedBy = faker.name.firstName()

@@ -1,40 +1,41 @@
 const db = require('../database/db-ctrl')
 const logger = require('../services/logging-event-handler-decorator').eventHandlerLogger
-
-async function handleAccountAddressUpdated(body){
+const eventsConstants = require('../config/events.constants')
+async function handleAccountAddressUpdated(e) {
     console.log('updatign afddress')
-    
-    await db.updateAccountAddress(body.aggregateId, body.payload.addressLine1, body.payload.addressLine1,
-        body.payload.addressLine2, body.payload.city, body.payload.postcode,
-        body.payload.state, body.payload.countryName)
+    return await logger(async () => await db.updateAccountAddress(e.aggregateId, e.payload.addressLine1, e.payload.addressLine1,
+        e.payload.addressLine2, e.payload.city, e.payload.postcode, e.payload.state, e.payload.countryName),
+        eventsConstants.domainEvents.accountAddressUpdated)()
 }
 
 
-async function handleAccountApproved(body){
+async function handleAccountApproved(e) {
     console.log('approving')
-    await db.approveAccount(body.aggregateId, body.payload.approvedBy)
+    return await logger(async () => await db.approveAccount(e.aggregateId, e.payload.approvedBy),
+        eventsConstants.domainEvents.accountApproved)()
 }
 
 
-async function handleAccountCreated(body){
+async function handleAccountCreated(e) {
     console.log('creating')
-
-    
-    await db.saveNewAccount(body.aggregateId, body.payload.accountNumber, body.payload.businessName)
+    return await logger(async () => await db.saveNewAccount(e.aggregateId, e.payload.accountNumber, e.payload.businessName),
+        eventsConstants.domainEvents.accountCreated)()
 }
 
 
-async function handleAccountDeleted(body){
+async function handleAccountDeleted(e) {
     console.log('deletinggg')
-    
-    await db.deleteAccount(body.aggregateId)
+    return await logger(async () => await db.deleteAccount(e.aggregateId),
+        eventsConstants.domainEvents.accountDeleted)()
 }
 
 
-async function handleSystemTagAdded(body){
+async function handleSystemTagAdded(e) {
     console.log('adding systag')
-    const obj = {}
-    return logger(async () => db.addSystemTag(body.aggregateId, body.payload.systemTagId, body.payload.name, body.payload.appliesToExpenses, body.payload.appliesToTimesheets), 'system tag added')()
+    return await logger(async () =>
+        await db.addSystemTag(e.aggregateId, e.payload.systemTagId,
+            e.payload.name, e.payload.appliesToExpenses, e.payload.appliesToTimesheets),
+        eventsConstants.domainEvents.systemTagAdded)()
 }
 
-module.exports = {handleAccountAddressUpdated,  handleAccountApproved, handleAccountDeleted, handleAccountCreated, handleSystemTagAdded}
+module.exports = { handleAccountAddressUpdated, handleAccountApproved, handleAccountDeleted, handleAccountCreated, handleSystemTagAdded }

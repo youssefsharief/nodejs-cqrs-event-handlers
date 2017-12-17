@@ -29,9 +29,11 @@ async function approveAccount(accountId, approvedBy) {
     return await accountModel.findOneAndUpdate({ accountId }, { $set: { approvedBy, isApproved: true } }, { new: true }).exec().catch(err => { throw err })
 }
 
-
-
+// For testing purposes only
+async function getAccountDetailsById(accountId) {
+    return await accountModel.findOne({ accountId }).lean().exec().catch(err => { throw err })
+}
 
 module.exports = {
-    saveNewAccount, addSystemTag, deleteAccount, updateAccountAddress, approveAccount
+    saveNewAccount, addSystemTag, deleteAccount, updateAccountAddress, approveAccount, getAccountDetailsById
 }

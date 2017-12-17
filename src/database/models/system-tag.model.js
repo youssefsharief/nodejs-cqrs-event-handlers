@@ -3,9 +3,9 @@ const Schema = mongoose.Schema
 
 
 const schema = new Schema({
-    systemTagId: { type: String, required: true,},
-    accountId: { type: String, required: true,},
-    name: { type: String, required: true,},
+    systemTagId: { type: String, required: true, unique: true },
+    accountId: { type: String, required: true, },
+    name: { type: String, required: true, },
     appliesToExpenses: { type: Boolean, required: true },
     appliesToTimesheets: { type: Boolean, required: true, },
 });

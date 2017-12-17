@@ -3,7 +3,7 @@ const pollEventStore = require('../core/poll-event-store').poll
 require('dotenv').config()
 
 
-process.on('unhandledRejection', up => { throw up })
+// process.on('unhandledRejection', up => { throw up })
 db.connectToOriginalDb()
 
 pollEventStore()
