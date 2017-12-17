@@ -1,4 +1,4 @@
-const { handleAccountAddressUpdated, handleAccountApproved, handleAccountCreated, handleAccountDeleted, handleSystemTagAdded } = require('./event-handlers')
+const { handleAccountAddressUpdated, handleAccountApproved, handleAccountCreated, handleAccountDeleted, handleSystemTagAdded, handleAccountReinstated } = require('./event-handlers')
 const eventConstants = require('../config/events.constants')
 
 
@@ -10,6 +10,7 @@ async function dealWithEventSavedInEventStore(e) {
         case eventConstants.domainEvents.systemTagAdded: return await handleSystemTagAdded(e)
         case eventConstants.domainEvents.accountDeleted: return await handleAccountDeleted(e)
         case eventConstants.domainEvents.accountCreated: return await handleAccountCreated(e)
+        case eventConstants.domainEvents.accountReinstated: return await handleAccountReinstated(e)
         default:
             break;
     }
