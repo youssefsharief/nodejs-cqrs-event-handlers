@@ -1,13 +1,12 @@
 {
-  "name": "crossover",
+  "name": "eventhandlers",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "coverage": "nodemon --exec istanbul cover node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
     "test": "nodemon --exec jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "dev": "nodemon ./src/bin/www",
-    "start": "nf start",
-    "s": "node src/bin/www"
+    "start": "node src/bin/www"
   },
   "engines": {
     "node": "8.9.1"

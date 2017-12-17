@@ -1,9 +1,11 @@
 const db = require('../database/db-connection.js')
 const pollEventStore = require('../core/poll-event-store').poll
 require('dotenv').config()
-
+require('../services/winston-logger').configure()
 
 // process.on('unhandledRejection', up => { throw up })
 db.connectToOriginalDb()
 
-pollEventStore()
+pollEventStore().catch(err=>console.log(err))
+
+
