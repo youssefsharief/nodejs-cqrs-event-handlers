@@ -1,10 +1,10 @@
 const db = require('../database/db-ctrl')
 const logger = require('../services/logging-event-handler-decorator').eventHandlerLogger
 const eventsConstants = require('../config/events.constants')
+
 async function handleAccountAddressUpdated(e) {
     console.log('updatign afddress')
-    return await logger(async () => await db.updateAccountAddress(e.aggregateId, e.payload.addressLine1, e.payload.addressLine1,
-        e.payload.addressLine2, e.payload.city, e.payload.postcode, e.payload.state, e.payload.countryName),
+    return await logger(async () => await db.updateAccountAddress(e.aggregateId, e.payload),
         eventsConstants.domainEvents.accountAddressUpdated)()
 }
 
